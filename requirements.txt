@@ -1,0 +1,3 @@
+# Core hub runtime deps
+# AllianceAuth supplies Django; keep this minimal.
+celery>=5.3

@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aa-core-hub"
+version = "1.0.0"
+description = "AllianceAuth Core Hub plugin (structures, timers, d-scan storage)"
+requires-python = ">=3.10"
+dependencies = ["celery>=5.3"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["aa_core_hub*"]
