@@ -4,9 +4,8 @@ from ..models import Structure, StructureTimer, DScan
 
 @login_required
 def dashboard(request):
-    ctx = {
+    return render(request, "aa_core_hub/dashboard.html", {
         "structure_count": Structure.objects.count(),
         "timer_count": StructureTimer.objects.count(),
         "dscan_count": DScan.objects.count(),
-    }
-    return render(request, "aa_core_hub/dashboard.html", ctx)
+    })

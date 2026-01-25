@@ -5,5 +5,4 @@ from ..models import DScan
 @login_required
 @permission_required("aa_core_hub.view_dscan", raise_exception=True)
 def dscan_list(request):
-    qs = DScan.objects.all()[:200]
-    return render(request, "aa_core_hub/dscan.html", {"dscans": qs})
+    return render(request, "aa_core_hub/dscan.html", {"dscans": DScan.objects.all()[:200]})

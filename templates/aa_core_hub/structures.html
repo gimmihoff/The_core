@@ -9,33 +9,16 @@
     <a class="btn btn-sm btn-outline-danger" href="?standing=HOSTILE">Hostile</a>
     <a class="btn btn-sm btn-outline-dark" href="{% url 'aa_core_hub:structures' %}">All</a>
   </div>
-
   <table class="table table-sm table-striped">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Standing</th>
-        <th>System</th>
-        <th>Owner (Alliance)</th>
-        <th>Owner (Corp)</th>
-        <th>Updated</th>
-      </tr>
-    </thead>
+    <thead><tr><th>Name</th><th>Type ID</th><th>Type</th><th>Standing</th><th>Status</th><th>System</th><th>Nearest</th><th>Fit</th><th>Updated</th></tr></thead>
     <tbody>
       {% for s in structures %}
       <tr>
-        <td>{{ s.name }}</td>
-        <td>{{ s.type_name }}</td>
-        <td>{{ s.standing }}</td>
-        <td>{{ s.solar_system_name }}</td>
-        <td>{{ s.owner_alliance_id }}</td>
-        <td>{{ s.owner_corporation_id }}</td>
-        <td>{{ s.updated_at }}</td>
+        <td>{{ s.name }}</td><td>{{ s.type_id }}</td><td>{{ s.type_name }}</td>
+        <td>{{ s.standing }}</td><td>{{ s.status }}</td><td>{{ s.solar_system_name }}</td>
+        <td>{{ s.nearest_type }} {{ s.nearest_name }}</td><td>{{ s.fit_status }}</td><td>{{ s.updated_at }}</td>
       </tr>
-      {% empty %}
-      <tr><td colspan="7">No structures.</td></tr>
-      {% endfor %}
+      {% empty %}<tr><td colspan="9">No structures.</td></tr>{% endfor %}
     </tbody>
   </table>
 </div>

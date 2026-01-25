@@ -9,5 +9,4 @@ def structure_list(request):
     qs = Structure.objects.all()
     if standing:
         qs = qs.filter(standing=standing)
-    ctx = {"structures": qs[:500], "standing": standing}
-    return render(request, "aa_core_hub/structures.html", ctx)
+    return render(request, "aa_core_hub/structures.html", {"structures": qs[:500]})
