@@ -25,7 +25,16 @@ This app registers standard Django model permissions:
 Grant via AllianceAuth Group Management.
 
 
-AA Core Hub v1.1.0 (AA 4.11.2 + MariaDB)
+# AA Core Hub v1.1.0 (AA 4.11.2 + MariaDB)
+
+
+# AA Core Hub v1.2.0 – Celestial Cache
+Adds:
+⦁	SolarSystemCelestial cache (STAR / PLANET / MOON)
+⦁	ESI-backed fetcher to populate per-system bodies
+Used by Recon for:
+⦁	Nearest dropdowns
+⦁	Planet-only / moon-only enforcement
 
 
 # AA Core Hub v1.2.1 – Celestial Populators
