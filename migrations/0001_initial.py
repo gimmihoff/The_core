@@ -1,0 +1,101 @@
+from django.db import migrations, models
+import django.db.models.deletion
+import django.utils.timezone
+
+class Migration(migrations.Migration):
+    initial = True
+    dependencies = []
+    operations = [
+        migrations.CreateModel(
+            name="DScan",
+            fields=[
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("source", models.CharField(db_index=True, default="MANUAL", max_length=32)),
+                ("solar_system_id", models.IntegerField(blank=True, db_index=True, null=True)),
+                ("solar_system_name", models.CharField(blank=True, db_index=True, default="", max_length=128)),
+                ("raw_text", models.TextField()),
+                ("parsed_json", models.JSONField(blank=True, null=True)),
+                ("created_by_user_id", models.IntegerField(blank=True, db_index=True, null=True)),
+                ("created_at", models.DateTimeField(db_index=True, default=django.utils.timezone.now)),
+            ],
+            options={"ordering": ("-created_at",)},
+        ),
+        migrations.CreateModel(
+            name="Structure",
+            fields=[
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("type_id", models.IntegerField(blank=True, db_index=True, null=True)),
+                ("type_name", models.CharField(blank=True, db_index=True, default="", max_length=255)),
+                ("structure_id", models.BigIntegerField(blank=True, db_index=True, null=True, unique=True)),
+                ("name", models.CharField(db_index=True, max_length=255)),
+                ("standing", models.CharField(choices=[("FRIENDLY","Friendly"),("NEUTRAL","Neutral"),("HOSTILE","Hostile")], db_index=True, default="NEUTRAL", max_length=16)),
+                ("owner_corporation_id", models.BigIntegerField(blank=True, db_index=True, null=True)),
+                ("owner_alliance_id", models.BigIntegerField(blank=True, db_index=True, null=True)),
+                ("solar_system_id", models.IntegerField(blank=True, db_index=True, null=True)),
+                ("solar_system_name", models.CharField(blank=True, db_index=True, default="", max_length=128)),
+                ("constellation_id", models.IntegerField(blank=True, db_index=True, null=True)),
+                ("constellation_name", models.CharField(blank=True, default="", max_length=128)),
+                ("region_id", models.IntegerField(blank=True, db_index=True, null=True)),
+                ("region_name", models.CharField(blank=True, default="", max_length=128)),
+                ("nearest_type", models.CharField(choices=[("ANYWHERE","Anywhere"),("PLANET","Planet"),("MOON","Moon"),("STAR","Star")], db_index=True, default="ANYWHERE", max_length=16)),
+                ("nearest_name", models.CharField(blank=True, db_index=True, default="", max_length=64)),
+                ("status", models.CharField(choices=[("ONLINE","Online"),("ANCHORING","Anchoring"),("LOW_POWER","Low Power"),("ABANDONED","Abandoned"),("REINFORCED","Reinforced"),("CONTESTED","Contested"),("REMOVED","Removed / Not Present"),("DESTROYED","Destroyed"),("UNKNOWN","Unknown")], db_index=True, default="UNKNOWN", max_length=16)),
+                ("fit_status", models.CharField(choices=[("UNKNOWN","Unknown"),("FITTED","Fitted"),("UNFITTED","Unfitted")], db_index=True, default="UNKNOWN", max_length=16)),
+                ("reinforce_hour", models.TimeField(blank=True, db_index=True, null=True)),
+                ("reinforce_effective_from", models.DateTimeField(blank=True, db_index=True, null=True)),
+                ("source", models.CharField(db_index=True, default="MANUAL", max_length=32)),
+                ("notes", models.TextField(blank=True, default="")),
+                ("last_seen_at", models.DateTimeField(blank=True, db_index=True, null=True)),
+                ("created_at", models.DateTimeField(db_index=True, default=django.utils.timezone.now)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+            ],
+            options={"ordering": ("-updated_at",)},
+        ),
+        migrations.CreateModel(
+            name="SystemIntel",
+            fields=[
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("solar_system_id", models.IntegerField(db_index=True)),
+                ("solar_system_name", models.CharField(blank=True, db_index=True, default="", max_length=128)),
+                ("status", models.CharField(blank=True, db_index=True, default="", max_length=64)),
+                ("details", models.TextField(blank=True, default="")),
+                ("tags", models.JSONField(blank=True, null=True)),
+                ("updated_by_user_id", models.IntegerField(blank=True, db_index=True, null=True)),
+                ("updated_at", models.DateTimeField(db_index=True, default=django.utils.timezone.now)),
+            ],
+            options={"ordering": ("solar_system_name",), "unique_together": {("solar_system_id",)}},
+        ),
+        migrations.CreateModel(
+            name="DScanItem",
+            fields=[
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("name", models.CharField(db_index=True, max_length=255)),
+                ("type_name", models.CharField(blank=True, db_index=True, default="", max_length=255)),
+                ("distance", models.CharField(blank=True, default="", max_length=64)),
+                ("category", models.CharField(blank=True, db_index=True, default="", max_length=64)),
+                ("dscan", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name="items", to="aa_core_hub.dscan")),
+            ],
+        ),
+        migrations.CreateModel(
+            name="StructureTimer",
+            fields=[
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("phase", models.CharField(choices=[("ANCHORING","Anchoring"),("SHIELD","Shield"),("ARMOR","Armor"),("HULL","Hull / Final"),("OTHER","Other")], db_index=True, default="OTHER", max_length=16)),
+                ("occurs_at", models.DateTimeField(db_index=True)),
+                ("is_confirmed", models.BooleanField(db_index=True, default=False)),
+                ("priority", models.PositiveSmallIntegerField(db_index=True, default=3)),
+                ("notes", models.TextField(blank=True, default="")),
+                ("created_at", models.DateTimeField(db_index=True, default=django.utils.timezone.now)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("structure", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name="timers", to="aa_core_hub.structure")),
+            ],
+            options={"ordering": ("occurs_at",)},
+        ),
+        migrations.AddIndex(model_name="structure", index=models.Index(fields=["solar_system_id","standing"], name="aa_core_hu_solar_s_idx")),
+        migrations.AddIndex(model_name="structure", index=models.Index(fields=["owner_alliance_id","standing"], name="aa_core_hu_owner_a_idx")),
+        migrations.AddIndex(model_name="structure", index=models.Index(fields=["owner_corporation_id","standing"], name="aa_core_hu_owner_c_idx")),
+        migrations.AddIndex(model_name="structure", index=models.Index(fields=["type_id","standing"], name="aa_core_hu_type_i_idx")),
+        migrations.AddIndex(model_name="structuretimer", index=models.Index(fields=["occurs_at","phase"], name="aa_core_hu_occurs_idx")),
+        migrations.AddIndex(model_name="structuretimer", index=models.Index(fields=["priority","occurs_at"], name="aa_core_hu_priorit_idx")),
+        migrations.AddIndex(model_name="dscanitem", index=models.Index(fields=["type_name","category"], name="aa_core_hu_type_n_idx")),
+    ]
