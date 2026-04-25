@@ -26,7 +26,14 @@ from .services.geography import (
     upsert_solar_system,
     upsert_stargate,
 )
-from .services.structure_logic import apply_type_defaults, sync_structure_status_from_timers
+from .services.structure_logic import (
+    apply_type_defaults,
+    create_enemy_structure,
+    create_or_update_structure,
+    create_structure_timer,
+    get_war_timer_timeline,
+    sync_structure_status_from_timers,
+)
 from .type_defaults import get_defaults
 
 
@@ -68,12 +75,16 @@ __all__ = [
     "SystemIntel",
     "apply_type_defaults",
     "create_dscan",
+    "create_enemy_structure",
+    "create_or_update_structure",
+    "create_structure_timer",
     "fetch_system_celestials",
     "fetch_system_geography",
     "get_neighbor_systems",
     "get_dscan_timeline_for_system",
     "get_defaults",
     "get_system_context",
+    "get_war_timer_timeline",
     "parse_dscan",
     "sync_structure_status_from_timers",
     "upsert_constellation",

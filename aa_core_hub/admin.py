@@ -8,6 +8,8 @@ from .models import (
     EveSolarSystem,
     EveStargate,
     SolarSystemCelestial,
+    Structure,
+    StructureTimer,
 )
 
 
@@ -26,6 +28,44 @@ class DScanAdmin(admin.ModelAdmin):
     search_fields = ("solar_system_name", "raw_text", "items__name", "items__type_name")
     readonly_fields = ("created_at",)
     inlines = (DScanItemInline,)
+
+
+class StructureTimerInline(admin.TabularInline):
+    model = StructureTimer
+    extra = 0
+    fields = ("phase", "occurs_at", "is_confirmed", "priority", "notes")
+
+
+@admin.register(Structure)
+class StructureAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "type_name",
+        "standing",
+        "status",
+        "solar_system_name",
+        "owner_alliance_id",
+        "source",
+        "updated_at",
+    )
+    list_filter = ("standing", "status", "fit_status", "source", "solar_system_name")
+    search_fields = (
+        "name",
+        "type_name",
+        "solar_system_name",
+        "nearest_name",
+        "owner_alliance_id",
+        "owner_corporation_id",
+    )
+    inlines = (StructureTimerInline,)
+
+
+@admin.register(StructureTimer)
+class StructureTimerAdmin(admin.ModelAdmin):
+    list_display = ("structure", "phase", "occurs_at", "is_confirmed", "priority")
+    list_filter = ("phase", "is_confirmed", "priority", "structure__standing")
+    search_fields = ("structure__name", "structure__solar_system_name", "notes")
+    autocomplete_fields = ("structure",)
 
 
 @admin.register(SolarSystemCelestial)

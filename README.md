@@ -40,6 +40,7 @@ from aa_core_hub.api import (
     get_dscan_timeline_for_system,
     get_defaults,
     get_system_context,
+    get_war_timer_timeline,
     parse_dscan,
     sync_structure_status_from_timers,
 )
@@ -99,6 +100,32 @@ Populate a system, its region, constellation, and outgoing stargates from ESI wi
 ```bash
 python manage.py fetch_geography --system-id 30000142
 ```
+
+## Enemy Structures and War Timers
+
+Child apps can add hostile structures and timers through Core:
+
+```python
+from aa_core_hub.api import create_enemy_structure, create_structure_timer
+
+structure = create_enemy_structure(
+    name="Hostile Astrahus",
+    type_id=35832,
+    solar_system_id=30000142,
+    solar_system_name="Jita",
+    owner_alliance_id=99000000,
+    source="WAR_PLANNER",
+)
+timer = create_structure_timer(
+    structure=structure,
+    phase="ARMOR",
+    occurs_at=timer_time,
+    is_confirmed=True,
+    priority=1,
+)
+```
+
+The Core dashboard shows upcoming hostile timers, and child apps can query them with `get_war_timer_timeline`.
 
 ## D-Scan Ingestion
 
