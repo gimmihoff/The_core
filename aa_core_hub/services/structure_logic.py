@@ -4,6 +4,25 @@ from ..models import Structure, StructureTimer
 from ..type_defaults import get_defaults
 
 
+def classify_structure_category(type_name: str = "", type_id: int | None = None) -> str:
+    normalized = (type_name or "").lower()
+    if any(term in normalized for term in ("territorial claim unit", "infrastructure hub", "ihub")):
+        return "SOV"
+    if any(term in normalized for term in ("cyno beacon", "cyno jammer", "ansiblex", "jump gate")):
+        return "FLEX"
+    if "customs office" in normalized:
+        return "CUSTOMS_OFFICE"
+    if "skyhook" in normalized:
+        return "SKYHOOK"
+    if any(term in normalized for term in ("metenox", "moon drill")):
+        return "MOON_DRILL"
+    if "mercenary den" in normalized:
+        return "MERCENARY_DEN"
+    if type_name or type_id:
+        return "STRUCTURE"
+    return "UNKNOWN"
+
+
 def apply_type_defaults(structure):
     d = get_defaults(structure.type_id)
     if not d:
@@ -12,6 +31,11 @@ def apply_type_defaults(structure):
         structure.type_name = d["type_name"]
     if d.get("nearest"):
         structure.nearest_type = d["nearest"]
+    if structure.structure_category == "UNKNOWN":
+        structure.structure_category = classify_structure_category(
+            type_name=structure.type_name,
+            type_id=structure.type_id,
+        )
 
 
 def sync_structure_status_from_timers(structure):
@@ -27,6 +51,7 @@ def create_or_update_structure(
     standing: str = "HOSTILE",
     type_id: int | None = None,
     type_name: str = "",
+    structure_category: str = "UNKNOWN",
     structure_id: int | None = None,
     owner_corporation_id: int | None = None,
     owner_alliance_id: int | None = None,
@@ -59,6 +84,9 @@ def create_or_update_structure(
             "standing": standing or "HOSTILE",
             "type_id": type_id,
             "type_name": type_name or "",
+            "structure_category": structure_category
+            if structure_category and structure_category != "UNKNOWN"
+            else classify_structure_category(type_name=type_name, type_id=type_id),
             "owner_corporation_id": owner_corporation_id,
             "owner_alliance_id": owner_alliance_id,
             "solar_system_id": solar_system_id,

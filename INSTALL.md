@@ -36,3 +36,5 @@ For D-scan upload and inspection workflows, use `create_dscan` and `get_dscan_ti
 For strategic planning workflows, use `get_system_context`, `get_neighbor_systems`, and the geography models from `aa_core_hub.api`. Populate Core's cache with `python manage.py fetch_geography --system-id <system_id>`.
 
 For hostile structure and timer workflows, use `create_enemy_structure`, `create_structure_timer`, and `get_war_timer_timeline` from `aa_core_hub.api`.
+
+For sovereignty-aware war planning, run `python manage.py fetch_sov --scope all` and use `get_sov_context` plus the `SovereigntySystem`, `SovereigntyStructure`, and `SovereigntyCampaign` models from `aa_core_hub.api`.

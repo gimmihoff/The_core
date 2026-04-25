@@ -4,6 +4,17 @@ STRUCTURE_STANDINGS = (
     ("HOSTILE", "Hostile"),
 )
 
+STRUCTURE_CATEGORIES = (
+    ("STRUCTURE", "Structure"),
+    ("SOV", "Sovereignty"),
+    ("FLEX", "Flex"),
+    ("CUSTOMS_OFFICE", "Customs Office"),
+    ("SKYHOOK", "Skyhook"),
+    ("MOON_DRILL", "Moon Drill"),
+    ("MERCENARY_DEN", "Mercenary Den"),
+    ("UNKNOWN", "Unknown"),
+)
+
 TIMER_PHASES = (
     ("ANCHORING", "Anchoring"),
     ("SHIELD", "Shield"),

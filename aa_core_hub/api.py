@@ -12,6 +12,9 @@ from .models import (
     EveSolarSystem,
     EveStargate,
     SolarSystemCelestial,
+    SovereigntyCampaign,
+    SovereigntyStructure,
+    SovereigntySystem,
     Structure,
     StructureTimer,
     SystemIntel,
@@ -26,8 +29,15 @@ from .services.geography import (
     upsert_solar_system,
     upsert_stargate,
 )
+from .services.sov import (
+    get_sov_context,
+    upsert_sov_campaign,
+    upsert_sov_structure,
+    upsert_sov_system,
+)
 from .services.structure_logic import (
     apply_type_defaults,
+    classify_structure_category,
     create_enemy_structure,
     create_or_update_structure,
     create_structure_timer,
@@ -62,6 +72,24 @@ def fetch_system_geography(system_id: int):
     return _fetch_system_geography(system_id=system_id)
 
 
+def fetch_sovereignty_map() -> int:
+    from .services.sov import fetch_sovereignty_map as _fetch_sovereignty_map
+
+    return _fetch_sovereignty_map()
+
+
+def fetch_sovereignty_structures() -> int:
+    from .services.sov import fetch_sovereignty_structures as _fetch_sovereignty_structures
+
+    return _fetch_sovereignty_structures()
+
+
+def fetch_sovereignty_campaigns() -> int:
+    from .services.sov import fetch_sovereignty_campaigns as _fetch_sovereignty_campaigns
+
+    return _fetch_sovereignty_campaigns()
+
+
 __all__ = [
     "DScan",
     "DScanItem",
@@ -70,25 +98,36 @@ __all__ = [
     "EveSolarSystem",
     "EveStargate",
     "SolarSystemCelestial",
+    "SovereigntyCampaign",
+    "SovereigntyStructure",
+    "SovereigntySystem",
     "Structure",
     "StructureTimer",
     "SystemIntel",
     "apply_type_defaults",
+    "classify_structure_category",
     "create_dscan",
     "create_enemy_structure",
     "create_or_update_structure",
     "create_structure_timer",
     "fetch_system_celestials",
     "fetch_system_geography",
+    "fetch_sovereignty_campaigns",
+    "fetch_sovereignty_map",
+    "fetch_sovereignty_structures",
     "get_neighbor_systems",
     "get_dscan_timeline_for_system",
     "get_defaults",
     "get_system_context",
+    "get_sov_context",
     "get_war_timer_timeline",
     "parse_dscan",
     "sync_structure_status_from_timers",
     "upsert_constellation",
     "upsert_region",
     "upsert_solar_system",
+    "upsert_sov_campaign",
+    "upsert_sov_structure",
+    "upsert_sov_system",
     "upsert_stargate",
 ]

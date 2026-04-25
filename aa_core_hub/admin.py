@@ -8,6 +8,9 @@ from .models import (
     EveSolarSystem,
     EveStargate,
     SolarSystemCelestial,
+    SovereigntyCampaign,
+    SovereigntyStructure,
+    SovereigntySystem,
     Structure,
     StructureTimer,
 )
@@ -41,6 +44,7 @@ class StructureAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "type_name",
+        "structure_category",
         "standing",
         "status",
         "solar_system_name",
@@ -48,7 +52,14 @@ class StructureAdmin(admin.ModelAdmin):
         "source",
         "updated_at",
     )
-    list_filter = ("standing", "status", "fit_status", "source", "solar_system_name")
+    list_filter = (
+        "standing",
+        "structure_category",
+        "status",
+        "fit_status",
+        "source",
+        "solar_system_name",
+    )
     search_fields = (
         "name",
         "type_name",
@@ -115,3 +126,39 @@ class EveStargateAdmin(admin.ModelAdmin):
         "source_system__name",
         "destination_system__name",
     )
+
+
+@admin.register(SovereigntySystem)
+class SovereigntySystemAdmin(admin.ModelAdmin):
+    list_display = ("solar_system_id", "alliance_id", "corporation_id", "faction_id", "updated_at")
+    list_filter = ("alliance_id", "corporation_id", "faction_id")
+    search_fields = ("solar_system_id", "alliance_id", "corporation_id", "faction_id")
+
+
+@admin.register(SovereigntyStructure)
+class SovereigntyStructureAdmin(admin.ModelAdmin):
+    list_display = (
+        "structure_id",
+        "structure_type_id",
+        "solar_system_id",
+        "alliance_id",
+        "vulnerability_occupancy_level",
+        "vulnerable_start_time",
+        "vulnerable_end_time",
+    )
+    list_filter = ("structure_type_id", "alliance_id", "solar_system_id")
+    search_fields = ("structure_id", "solar_system_id", "alliance_id")
+
+
+@admin.register(SovereigntyCampaign)
+class SovereigntyCampaignAdmin(admin.ModelAdmin):
+    list_display = (
+        "campaign_id",
+        "event_type",
+        "solar_system_id",
+        "constellation_id",
+        "defender_id",
+        "start_time",
+    )
+    list_filter = ("event_type", "defender_id", "solar_system_id")
+    search_fields = ("campaign_id", "structure_id", "solar_system_id", "constellation_id")

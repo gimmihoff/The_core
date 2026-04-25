@@ -59,3 +59,20 @@ class WarTimerTests(TestCase):
 
         self.assertEqual(timeline, [timer])
         self.assertEqual(structure.standing, "HOSTILE")
+
+    def test_enemy_structure_accepts_unknown_type_and_classifies_known_sov(self):
+        from aa_core_hub.api import create_enemy_structure
+
+        unknown = create_enemy_structure(
+            name="Unrecognized Hostile Asset",
+            type_id=999999,
+            type_name="Future Structure Type",
+        )
+        sov = create_enemy_structure(
+            name="Hostile IHub",
+            type_name="Infrastructure Hub",
+            structure_id=12345,
+        )
+
+        self.assertEqual(unknown.structure_category, "STRUCTURE")
+        self.assertEqual(sov.structure_category, "SOV")

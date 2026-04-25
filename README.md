@@ -22,6 +22,9 @@ from aa_core_hub.api import (
     EveSolarSystem,
     EveStargate,
     SolarSystemCelestial,
+    SovereigntyCampaign,
+    SovereigntyStructure,
+    SovereigntySystem,
     Structure,
     StructureTimer,
     SystemIntel,
@@ -33,16 +36,24 @@ The API module also exports:
 ```python
 from aa_core_hub.api import (
     apply_type_defaults,
+    classify_structure_category,
     create_dscan,
     fetch_system_celestials,
     fetch_system_geography,
+    fetch_sovereignty_campaigns,
+    fetch_sovereignty_map,
+    fetch_sovereignty_structures,
     get_neighbor_systems,
     get_dscan_timeline_for_system,
     get_defaults,
     get_system_context,
+    get_sov_context,
     get_war_timer_timeline,
     parse_dscan,
     sync_structure_status_from_timers,
+    upsert_sov_campaign,
+    upsert_sov_structure,
+    upsert_sov_system,
 )
 ```
 
@@ -126,6 +137,27 @@ timer = create_structure_timer(
 ```
 
 The Core dashboard shows upcoming hostile timers, and child apps can query them with `get_war_timer_timeline`.
+
+## Sovereignty Cache
+
+Core stores current SOV ownership, SOV structures, and active campaigns for the war planner:
+
+```python
+from aa_core_hub.api import get_sov_context
+
+sov = get_sov_context(solar_system_id=30000142)
+```
+
+Populate SOV cache from ESI with:
+
+```bash
+python manage.py fetch_sov --scope all
+python manage.py fetch_sov --scope map
+python manage.py fetch_sov --scope structures
+python manage.py fetch_sov --scope campaigns
+```
+
+Enemy structures are type-flexible: Core accepts unknown `type_id` and `type_name` values, stores them, and classifies known structure families into `STRUCTURE`, `SOV`, `FLEX`, `CUSTOMS_OFFICE`, `SKYHOOK`, `MOON_DRILL`, `MERCENARY_DEN`, or `UNKNOWN`.
 
 ## D-Scan Ingestion
 
