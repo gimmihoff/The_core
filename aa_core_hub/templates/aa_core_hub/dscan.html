@@ -4,11 +4,11 @@
 <div class="container-fluid">
   <h3>D-Scans</h3>
   <table class="table table-sm table-striped">
-    <thead><tr><th>ID</th><th>System</th><th>Source</th><th>Created</th></tr></thead>
+    <thead><tr><th>ID</th><th>System</th><th>Source</th><th>Scanned</th><th>Uploaded</th></tr></thead>
     <tbody>
       {% for d in dscans %}
-      <tr><td>{{ d.id }}</td><td>{{ d.solar_system_name }}</td><td>{{ d.source }}</td><td>{{ d.created_at }}</td></tr>
-      {% empty %}<tr><td colspan="4">No d-scans.</td></tr>{% endfor %}
+      <tr><td>{{ d.id }}</td><td>{{ d.solar_system_name }}</td><td>{{ d.source }}</td><td>{{ d.scanned_at }}</td><td>{{ d.created_at }}</td></tr>
+      {% empty %}<tr><td colspan="5">No d-scans.</td></tr>{% endfor %}
     </tbody>
   </table>
 </div>

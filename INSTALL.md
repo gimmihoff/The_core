@@ -30,3 +30,5 @@ from aa_core_hub.api import Structure, StructureTimer, DScan
 ```
 
 Imports from `aa_core_hub.models` still work for Django internals, but new child-plugin code should not depend on that module as the public contract.
+
+For D-scan upload and inspection workflows, use `create_dscan` and `get_dscan_timeline_for_system` from `aa_core_hub.api` so system linkage, parsed rows, and timeline ordering are consistent across child apps.

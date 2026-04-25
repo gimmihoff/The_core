@@ -28,7 +28,9 @@ The API module also exports:
 ```python
 from aa_core_hub.api import (
     apply_type_defaults,
+    create_dscan,
     fetch_system_celestials,
+    get_dscan_timeline_for_system,
     get_defaults,
     parse_dscan,
     sync_structure_status_from_timers,
@@ -39,7 +41,7 @@ from aa_core_hub.api import (
 
 ## Breaking Change
 
-Version 1.3.1 makes `aa_core_hub/` the only source package and removes duplicate root-level modules, checked-in bytecode, and stale generated files. Existing database migrations remain under `aa_core_hub.migrations`; no data migration is required for this cleanup.
+Version 1.3.2 makes `aa_core_hub/` the only source package and removes duplicate root-level modules, checked-in bytecode, and stale generated files. Existing database migrations remain under `aa_core_hub.migrations`; no data migration is required for this cleanup.
 
 Child plugins should update imports from:
 
@@ -72,6 +74,31 @@ python manage.py fetch_celestials --system-id 30000142 --name Jita
 ```
 
 Use `--no-overwrite` to keep existing rows and add only missing entries.
+
+## D-Scan Ingestion
+
+Upload child apps should create D-scans through Core so raw text, parsed JSON, normalized item rows, system linkage, and timestamps stay consistent:
+
+```python
+from aa_core_hub.api import create_dscan
+
+dscan = create_dscan(
+    raw_text=raw_text,
+    solar_system_id=30000142,
+    solar_system_name="Jita",
+    source="UPLOAD_APP",
+    created_by_user_id=request.user.id,
+    scanned_at=scanned_at,
+)
+```
+
+Inspection child apps can build system timelines from Core:
+
+```python
+from aa_core_hub.api import get_dscan_timeline_for_system
+
+timeline = get_dscan_timeline_for_system(solar_system_id=30000142, limit=100)
+```
 
 ## Smoke Checks
 
