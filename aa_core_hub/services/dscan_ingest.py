@@ -59,3 +59,11 @@ def get_dscan_timeline_for_system(*, solar_system_id: int, limit: int = 100):
         .prefetch_related("items")
         .order_by("-scanned_at", "-created_at")[:limit]
     )
+
+
+def get_dscan_by_public_id(public_id):
+    """Return one shared D-scan by stable public UUID for permalink views."""
+
+    if not public_id:
+        raise ValueError("public_id is required")
+    return DScan.objects.prefetch_related("items").get(public_id=public_id)

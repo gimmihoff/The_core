@@ -26,10 +26,17 @@ class DScanItemInline(admin.TabularInline):
 
 @admin.register(DScan)
 class DScanAdmin(admin.ModelAdmin):
-    list_display = ("solar_system_name", "solar_system_id", "source", "scanned_at", "created_at")
+    list_display = (
+        "public_id",
+        "solar_system_name",
+        "solar_system_id",
+        "source",
+        "scanned_at",
+        "created_at",
+    )
     list_filter = ("source", "solar_system_name")
-    search_fields = ("solar_system_name", "raw_text", "items__name", "items__type_name")
-    readonly_fields = ("created_at",)
+    search_fields = ("public_id", "solar_system_name", "raw_text", "items__name", "items__type_name")
+    readonly_fields = ("public_id", "created_at")
     inlines = (DScanItemInline,)
 
 

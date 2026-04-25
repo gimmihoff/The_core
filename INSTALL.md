@@ -33,6 +33,8 @@ Imports from `aa_core_hub.models` still work for Django internals, but new child
 
 For D-scan upload and inspection workflows, use `create_dscan` and `get_dscan_timeline_for_system` from `aa_core_hub.api` so system linkage, parsed rows, and timeline ordering are consistent across child apps.
 
+Use `DScan.public_id` and `get_dscan_by_public_id` for shareable D-scan permalinks instead of exposing database IDs.
+
 For strategic planning workflows, use `get_system_context`, `get_neighbor_systems`, and the geography models from `aa_core_hub.api`. Populate Core's cache with `python manage.py fetch_geography --system-id <system_id>`.
 
 For hostile structure and timer workflows, use `create_enemy_structure`, `create_structure_timer`, and `get_war_timer_timeline` from `aa_core_hub.api`.

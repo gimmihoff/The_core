@@ -43,6 +43,7 @@ from aa_core_hub.api import (
     fetch_sovereignty_campaigns,
     fetch_sovereignty_map,
     fetch_sovereignty_structures,
+    get_dscan_by_public_id,
     get_neighbor_systems,
     get_dscan_timeline_for_system,
     get_defaults,
@@ -182,6 +183,14 @@ Inspection child apps can build system timelines from Core:
 from aa_core_hub.api import get_dscan_timeline_for_system
 
 timeline = get_dscan_timeline_for_system(solar_system_id=30000142, limit=100)
+```
+
+Child apps should use `dscan.public_id` in share URLs, then resolve that permalink with `get_dscan_by_public_id`.
+
+```python
+from aa_core_hub.api import get_dscan_by_public_id
+
+dscan = get_dscan_by_public_id(public_id)
 ```
 
 ## Smoke Checks

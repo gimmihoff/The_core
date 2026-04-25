@@ -1,8 +1,11 @@
+import uuid
+
 from django.db import models
 from django.utils import timezone
 
 
 class DScan(models.Model):
+    public_id = models.UUIDField(default=uuid.uuid4, unique=True, db_index=True, editable=False)
     source = models.CharField(max_length=32, default="MANUAL", db_index=True)
     solar_system_id = models.IntegerField(null=True, blank=True, db_index=True)
     solar_system_name = models.CharField(max_length=128, blank=True, default="", db_index=True)
@@ -15,6 +18,7 @@ class DScan(models.Model):
     class Meta:
         ordering = ("-scanned_at", "-created_at")
         indexes = [
+            models.Index(fields=["public_id", "created_at"]),
             models.Index(fields=["solar_system_id", "scanned_at"]),
             models.Index(fields=["solar_system_name", "scanned_at"]),
             models.Index(fields=["source", "scanned_at"]),

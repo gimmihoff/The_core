@@ -57,6 +57,7 @@ class PublicApiTests(unittest.TestCase):
             "fetch_sovereignty_campaigns",
             "fetch_sovereignty_map",
             "fetch_sovereignty_structures",
+            "get_dscan_by_public_id",
             "get_neighbor_systems",
             "get_dscan_timeline_for_system",
             "get_defaults",

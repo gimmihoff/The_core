@@ -50,8 +50,20 @@ class DScanIngestTests(TestCase):
         self.assertEqual(dscan.solar_system_id, 30000142)
         self.assertEqual(dscan.solar_system_name, "Jita")
         self.assertEqual(dscan.scanned_at, scanned_at)
+        self.assertIsNotNone(dscan.public_id)
         self.assertEqual(dscan.items.count(), 2)
         self.assertEqual(dscan.items.order_by("id").first().category, "STRUCTURE")
+
+    def test_dscan_can_be_resolved_by_public_id(self):
+        from aa_core_hub.api import create_dscan, get_dscan_by_public_id
+
+        dscan = create_dscan(
+            raw_text="Astrahus\tUpwell Structure\t1,000 km",
+            solar_system_id=30000142,
+            solar_system_name="Jita",
+        )
+
+        self.assertEqual(get_dscan_by_public_id(dscan.public_id), dscan)
 
     def test_timeline_filters_by_system(self):
         from aa_core_hub.api import create_dscan, get_dscan_timeline_for_system

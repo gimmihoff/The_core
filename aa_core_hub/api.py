@@ -20,7 +20,11 @@ from .models import (
     SystemIntel,
 )
 from .services.dscan_parser import parse_dscan
-from .services.dscan_ingest import create_dscan, get_dscan_timeline_for_system
+from .services.dscan_ingest import (
+    create_dscan,
+    get_dscan_by_public_id,
+    get_dscan_timeline_for_system,
+)
 from .services.geography import (
     get_neighbor_systems,
     get_system_context,
@@ -116,6 +120,7 @@ __all__ = [
     "fetch_sovereignty_map",
     "fetch_sovereignty_structures",
     "get_neighbor_systems",
+    "get_dscan_by_public_id",
     "get_dscan_timeline_for_system",
     "get_defaults",
     "get_system_context",
