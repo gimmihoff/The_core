@@ -1,6 +1,14 @@
 from django.contrib import admin
 
-from .models import DScan, DScanItem, SolarSystemCelestial
+from .models import (
+    DScan,
+    DScanItem,
+    EveConstellation,
+    EveRegion,
+    EveSolarSystem,
+    EveStargate,
+    SolarSystemCelestial,
+)
 
 
 class DScanItemInline(admin.TabularInline):
@@ -25,3 +33,45 @@ class SolarSystemCelestialAdmin(admin.ModelAdmin):
     list_display = ("solar_system_name", "celestial_type", "name", "parent_planet_name")
     list_filter = ("celestial_type", "solar_system_name")
     search_fields = ("solar_system_name", "name")
+
+
+@admin.register(EveRegion)
+class EveRegionAdmin(admin.ModelAdmin):
+    list_display = ("name", "region_id")
+    search_fields = ("name", "region_id")
+
+
+@admin.register(EveConstellation)
+class EveConstellationAdmin(admin.ModelAdmin):
+    list_display = ("name", "constellation_id", "region_id_external", "region")
+    list_filter = ("region",)
+    search_fields = ("name", "constellation_id", "region__name")
+
+
+@admin.register(EveSolarSystem)
+class EveSolarSystemAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "solar_system_id",
+        "security_status",
+        "constellation_id_external",
+        "region_id_external",
+    )
+    list_filter = ("region", "constellation")
+    search_fields = ("name", "solar_system_id", "constellation__name", "region__name")
+
+
+@admin.register(EveStargate)
+class EveStargateAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "stargate_id",
+        "source_system_id_external",
+        "destination_system_id_external",
+    )
+    search_fields = (
+        "name",
+        "stargate_id",
+        "source_system__name",
+        "destination_system__name",
+    )

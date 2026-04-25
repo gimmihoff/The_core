@@ -35,6 +35,10 @@ class PublicApiTests(unittest.TestCase):
         expected_exports = {
             "DScan",
             "DScanItem",
+            "EveConstellation",
+            "EveRegion",
+            "EveSolarSystem",
+            "EveStargate",
             "SolarSystemCelestial",
             "Structure",
             "StructureTimer",
@@ -42,10 +46,17 @@ class PublicApiTests(unittest.TestCase):
             "apply_type_defaults",
             "create_dscan",
             "fetch_system_celestials",
+            "fetch_system_geography",
+            "get_neighbor_systems",
             "get_dscan_timeline_for_system",
             "get_defaults",
+            "get_system_context",
             "parse_dscan",
             "sync_structure_status_from_timers",
+            "upsert_constellation",
+            "upsert_region",
+            "upsert_solar_system",
+            "upsert_stargate",
         }
 
         self.assertTrue(expected_exports.issubset(set(api.__all__)))

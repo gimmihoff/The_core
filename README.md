@@ -7,6 +7,7 @@ AA Core Hub is the shared Core plugin for AllianceAuth 4.11.2 on MariaDB. It pro
 - D-Scan storage and parsing
 - Lightweight system intel annotations
 - Solar system celestial cache population via ESI
+- Strategic geography cache for regions, constellations, systems, and stargates
 
 ## Child Plugin API
 
@@ -16,6 +17,10 @@ Child plugins should import supported models and helpers from `aa_core_hub.api`.
 from aa_core_hub.api import (
     DScan,
     DScanItem,
+    EveConstellation,
+    EveRegion,
+    EveSolarSystem,
+    EveStargate,
     SolarSystemCelestial,
     Structure,
     StructureTimer,
@@ -30,8 +35,11 @@ from aa_core_hub.api import (
     apply_type_defaults,
     create_dscan,
     fetch_system_celestials,
+    fetch_system_geography,
+    get_neighbor_systems,
     get_dscan_timeline_for_system,
     get_defaults,
+    get_system_context,
     parse_dscan,
     sync_structure_status_from_timers,
 )
@@ -41,7 +49,7 @@ from aa_core_hub.api import (
 
 ## Breaking Change
 
-Version 1.3.2 makes `aa_core_hub/` the only source package and removes duplicate root-level modules, checked-in bytecode, and stale generated files. Existing database migrations remain under `aa_core_hub.migrations`; no data migration is required for this cleanup.
+Version 1.3.3 makes `aa_core_hub/` the only source package and removes duplicate root-level modules, checked-in bytecode, and stale generated files. Existing database migrations remain under `aa_core_hub.migrations`; no data migration is required for this cleanup.
 
 Child plugins should update imports from:
 
@@ -74,6 +82,23 @@ python manage.py fetch_celestials --system-id 30000142 --name Jita
 ```
 
 Use `--no-overwrite` to keep existing rows and add only missing entries.
+
+## Strategic Geography Cache
+
+War-planning and overview child apps should use Core's geography cache for map topology:
+
+```python
+from aa_core_hub.api import get_neighbor_systems, get_system_context
+
+context = get_system_context(solar_system_id=30000142)
+neighbors = get_neighbor_systems(solar_system_id=30000142)
+```
+
+Populate a system, its region, constellation, and outgoing stargates from ESI with:
+
+```bash
+python manage.py fetch_geography --system-id 30000142
+```
 
 ## D-Scan Ingestion
 
