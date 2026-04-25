@@ -4,11 +4,17 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aa-core-hub"
-version = "1.0.0"
-description = "AllianceAuth Core Hub plugin (structures, timers, d-scan storage)"
+version = "1.3.1"
+description = "AllianceAuth Core Hub plugin with shared models and child-plugin API"
 requires-python = ">=3.10"
 dependencies = ["celery>=5.3"]
 
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["aa_core_hub*"]
+
+[tool.setuptools.package-data]
+aa_core_hub = [
+    "templates/**/*.html",
+    "static/**/*",
+]
