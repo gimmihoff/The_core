@@ -1,10 +1,22 @@
 from django.db import models
 from django.utils import timezone
-from ..constants import STRUCTURE_STANDINGS, NEAREST_TYPES, FIT_STATUS, STRUCTURE_STATUS
+from ..constants import (
+    FIT_STATUS,
+    NEAREST_TYPES,
+    STRUCTURE_CATEGORIES,
+    STRUCTURE_STANDINGS,
+    STRUCTURE_STATUS,
+)
 
 class Structure(models.Model):
     type_id = models.IntegerField(null=True, blank=True, db_index=True)
     type_name = models.CharField(max_length=255, blank=True, default="", db_index=True)
+    structure_category = models.CharField(
+        max_length=32,
+        choices=STRUCTURE_CATEGORIES,
+        default="UNKNOWN",
+        db_index=True,
+    )
     structure_id = models.BigIntegerField(null=True, blank=True, db_index=True, unique=True)
 
     name = models.CharField(max_length=255, db_index=True)
@@ -42,6 +54,7 @@ class Structure(models.Model):
             models.Index(fields=["owner_alliance_id", "standing"]),
             models.Index(fields=["owner_corporation_id", "standing"]),
             models.Index(fields=["type_id", "standing"]),
+            models.Index(fields=["structure_category", "standing"]),
         ]
 
     def __str__(self) -> str:
