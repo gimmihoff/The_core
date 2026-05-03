@@ -34,6 +34,32 @@ class DScanParserTests(unittest.TestCase):
         self.assertEqual(parse_dscan(""), [])
         self.assertEqual(parse_dscan(None), [])
 
+    def test_parse_dscan_extracts_id_name_type_distance_rows(self):
+        self.assertEqual(
+            parse_dscan("11190\tHostile Pilot\tSentinel\t117 km"),
+            [
+                {
+                    "name": "Hostile Pilot",
+                    "type_name": "Sentinel",
+                    "distance": "117 km",
+                    "category": "SHIP_OR_OBJECT",
+                },
+            ],
+        )
+
+    def test_parse_dscan_uses_id_as_name_when_object_name_is_blank(self):
+        self.assertEqual(
+            parse_dscan("1035466617946\t\tUpwell Structure\t1,000 km"),
+            [
+                {
+                    "name": "1035466617946",
+                    "type_name": "Upwell Structure",
+                    "distance": "1,000 km",
+                    "category": "STRUCTURE",
+                },
+            ],
+        )
+
     def test_classify_dscan_type_identifies_core_categories(self):
         self.assertEqual(classify_dscan_type("Astrahus"), "STRUCTURE")
         self.assertEqual(classify_dscan_type("Upwell Structure"), "STRUCTURE")
