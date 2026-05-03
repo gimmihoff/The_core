@@ -64,5 +64,6 @@ class DScanParserTests(unittest.TestCase):
         self.assertEqual(classify_dscan_type("Astrahus"), "STRUCTURE")
         self.assertEqual(classify_dscan_type("Upwell Structure"), "STRUCTURE")
         self.assertEqual(classify_dscan_type("Ansiblex Jump Gate"), "SOV")
+        self.assertEqual(classify_dscan_type("Stargate"), "SOV")
         self.assertEqual(classify_dscan_type("Combat Scanner Probe"), "PROBE")
         self.assertEqual(classify_dscan_type(""), "")

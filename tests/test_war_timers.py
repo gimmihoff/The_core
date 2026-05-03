@@ -46,6 +46,7 @@ class WarTimerTests(TestCase):
             type_id=35832,
             solar_system_id=30000142,
             solar_system_name="Jita",
+            fit_notes="[Astrahus, Example Fit]",
         )
         timer = create_structure_timer(
             structure=structure,
@@ -59,6 +60,7 @@ class WarTimerTests(TestCase):
 
         self.assertEqual(timeline, [timer])
         self.assertEqual(structure.standing, "HOSTILE")
+        self.assertEqual(structure.fit_notes, "[Astrahus, Example Fit]")
 
     def test_enemy_structure_accepts_unknown_type_and_classifies_known_sov(self):
         from aa_core_hub.api import create_enemy_structure
@@ -76,3 +78,10 @@ class WarTimerTests(TestCase):
 
         self.assertEqual(unknown.structure_category, "STRUCTURE")
         self.assertEqual(sov.structure_category, "SOV")
+
+    def test_stargates_are_classified_as_flex_infrastructure(self):
+        from aa_core_hub.api import create_or_update_structure
+
+        structure = create_or_update_structure(name="Jita Stargate", type_name="Stargate")
+
+        self.assertEqual(structure.structure_category, "FLEX")

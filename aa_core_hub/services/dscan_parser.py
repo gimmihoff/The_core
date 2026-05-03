@@ -8,7 +8,7 @@ def classify_dscan_type(type_name: str) -> str:
         return "STRUCTURE"
     if any(term in normalized for term in ("customs office", "orbital skyhook", "mercenary den")):
         return "STRUCTURE"
-    if any(term in normalized for term in ("cyno beacon", "cyno jammer", "ansiblex")):
+    if any(term in normalized for term in ("cyno beacon", "cyno jammer", "ansiblex", "stargate")):
         return "SOV"
     if "scanner probe" in normalized or normalized.endswith(" probe"):
         return "PROBE"

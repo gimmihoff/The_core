@@ -41,6 +41,7 @@ STRUCTURE_STATUS = (
     ("ANCHORING", "Anchoring"),
     ("LOW_POWER", "Low Power"),
     ("ABANDONED", "Abandoned"),
+    ("ATTACKED", "Attacked"),
     ("REINFORCED", "Reinforced"),
     ("CONTESTED", "Contested"),
     ("REMOVED", "Removed / Not Present"),
