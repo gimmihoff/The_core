@@ -189,3 +189,100 @@ def fetch_system_geography(system_id: int):
                 position=stargate_data.get("position"),
             )
     return system
+
+
+def fetch_constellation_geography(
+    constellation_id: int,
+    *,
+    include_stargates: bool = True,
+) -> dict:
+    """Populate Core's map cache for every system in one constellation."""
+
+    from esi.clients import EsiClientProvider
+
+    client = EsiClientProvider().client
+    constellation_data = client.Universe.get_universe_constellations_constellation_id(
+        constellation_id=constellation_id
+    ).results()
+    region_id = constellation_data.get("region_id")
+    region_data = (
+        client.Universe.get_universe_regions_region_id(region_id=region_id).results()
+        if region_id
+        else {}
+    )
+
+    with transaction.atomic():
+        if region_id:
+            upsert_region(
+                region_id=region_id,
+                name=region_data.get("name", ""),
+                description=region_data.get("description", ""),
+            )
+        upsert_constellation(
+            constellation_id=constellation_id,
+            name=constellation_data.get("name", ""),
+            region_id=region_id,
+        )
+
+    systems = []
+    for system_id in constellation_data.get("systems", []):
+        if include_stargates:
+            systems.append(fetch_system_geography(system_id))
+        else:
+            system_data = client.Universe.get_universe_systems_system_id(
+                system_id=system_id
+            ).results()
+            systems.append(
+                upsert_solar_system(
+                    solar_system_id=system_id,
+                    name=system_data.get("name", ""),
+                    constellation_id=constellation_id,
+                    region_id=region_id,
+                    security_status=system_data.get("security_status"),
+                    position=system_data.get("position"),
+                )
+            )
+
+    return {
+        "constellation_id": constellation_id,
+        "constellation_name": constellation_data.get("name", ""),
+        "region_id": region_id,
+        "systems": systems,
+    }
+
+
+def fetch_region_geography(
+    region_id: int,
+    *,
+    include_stargates: bool = True,
+) -> dict:
+    """Populate Core's map cache for every constellation/system in one region."""
+
+    from esi.clients import EsiClientProvider
+
+    client = EsiClientProvider().client
+    region_data = client.Universe.get_universe_regions_region_id(region_id=region_id).results()
+
+    with transaction.atomic():
+        upsert_region(
+            region_id=region_id,
+            name=region_data.get("name", ""),
+            description=region_data.get("description", ""),
+        )
+
+    constellations = []
+    system_count = 0
+    for constellation_id in region_data.get("constellations", []):
+        result = fetch_constellation_geography(
+            constellation_id,
+            include_stargates=include_stargates,
+        )
+        constellations.append(result)
+        system_count += len(result["systems"])
+
+    return {
+        "region_id": region_id,
+        "region_name": region_data.get("name", ""),
+        "constellations": constellations,
+        "system_count": system_count,
+    }

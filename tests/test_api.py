@@ -53,6 +53,8 @@ class PublicApiTests(unittest.TestCase):
             "create_or_update_structure",
             "create_structure_timer",
             "fetch_system_celestials",
+            "fetch_constellation_geography",
+            "fetch_region_geography",
             "fetch_system_geography",
             "fetch_sovereignty_campaigns",
             "fetch_sovereignty_map",

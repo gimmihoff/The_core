@@ -111,7 +111,12 @@ Populate a system, its region, constellation, and outgoing stargates from ESI wi
 
 ```bash
 python manage.py fetch_geography --system-id 30000142
+python manage.py fetch_geography --constellation-id 20000020
+python manage.py fetch_geography --region-id 10000002
+python manage.py fetch_geography --region-id 10000002 --no-stargates
 ```
+
+Use `--no-stargates` for faster bulk population when the immediate goal is system search/dropdowns rather than route topology.
 
 ## Enemy Structures and War Timers
 
