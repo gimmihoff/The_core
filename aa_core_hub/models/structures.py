@@ -37,6 +37,7 @@ class Structure(models.Model):
 
     status = models.CharField(max_length=16, choices=STRUCTURE_STATUS, default="UNKNOWN", db_index=True)
     fit_status = models.CharField(max_length=16, choices=FIT_STATUS, default="UNKNOWN", db_index=True)
+    fit_notes = models.TextField(blank=True, default="")
 
     reinforce_hour = models.TimeField(null=True, blank=True, db_index=True)
     reinforce_effective_from = models.DateTimeField(null=True, blank=True, db_index=True)

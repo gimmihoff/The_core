@@ -8,7 +8,7 @@ def classify_structure_category(type_name: str = "", type_id: int | None = None)
     normalized = (type_name or "").lower()
     if any(term in normalized for term in ("territorial claim unit", "infrastructure hub", "ihub")):
         return "SOV"
-    if any(term in normalized for term in ("cyno beacon", "cyno jammer", "ansiblex", "jump gate")):
+    if any(term in normalized for term in ("cyno beacon", "cyno jammer", "ansiblex", "jump gate", "stargate")):
         return "FLEX"
     if "customs office" in normalized:
         return "CUSTOMS_OFFICE"
@@ -65,6 +65,7 @@ def create_or_update_structure(
     nearest_name: str = "",
     status: str = "UNKNOWN",
     fit_status: str = "UNKNOWN",
+    fit_notes: str = "",
     reinforce_hour=None,
     reinforce_effective_from=None,
     source: str = "MANUAL",
@@ -99,6 +100,7 @@ def create_or_update_structure(
             "nearest_name": nearest_name or "",
             "status": status or "UNKNOWN",
             "fit_status": fit_status or "UNKNOWN",
+            "fit_notes": fit_notes or "",
             "reinforce_hour": reinforce_hour,
             "reinforce_effective_from": reinforce_effective_from,
             "source": source or "MANUAL",
