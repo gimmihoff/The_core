@@ -26,6 +26,8 @@ from .services.dscan_ingest import (
     get_dscan_timeline_for_system,
 )
 from .services.geography import (
+    fetch_constellation_geography,
+    fetch_region_geography,
     get_neighbor_systems,
     get_system_context,
     upsert_constellation,
@@ -115,6 +117,8 @@ __all__ = [
     "create_or_update_structure",
     "create_structure_timer",
     "fetch_system_celestials",
+    "fetch_constellation_geography",
+    "fetch_region_geography",
     "fetch_system_geography",
     "fetch_sovereignty_campaigns",
     "fetch_sovereignty_map",
